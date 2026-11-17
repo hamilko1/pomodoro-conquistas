@@ -22,3 +22,8 @@ def client_csrf():
 def test_post_sem_token_csrf_e_recusado(client_csrf):
     resp = client_csrf.post("/login", data={"email": "a@b.com", "senha": "x"})
     assert resp.status_code == 400
+
+
+def test_api_sem_token_csrf_e_recusada(client_csrf):
+    resp = client_csrf.post("/api/sessoes/iniciar", json={"tipo": "foco", "duracao_min": 25})
+    assert resp.status_code == 400

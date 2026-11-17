@@ -1,8 +1,53 @@
 {% extends "base.html" %}
 {% block titulo %}Painel{% endblock %}
 {% block conteudo %}
-<section class="cartao">
-  <h1>Olá, {{ current_user.nome }}</h1>
-  <p>O timer, as metas e as conquistas vão aparecer aqui nas próximas etapas.</p>
+<section class="cartao timer" id="timer"
+         data-url-iniciar="{{ url_for('sessoes.iniciar') }}"
+         data-url-concluir="{{ url_for('sessoes.concluir', sessao_id=0) }}"
+         data-focos-hoje="{{ focos_hoje }}">
+  <div class="tipos" role="group" aria-label="Tipo de ciclo">
+    <button type="button" class="tipo" data-tipo="foco" aria-pressed="true">Foco</button>
+    <button type="button" class="tipo" data-tipo="pausa_curta" aria-pressed="false">Pausa curta</button>
+    <button type="button" class="tipo" data-tipo="pausa_longa" aria-pressed="false">Pausa longa</button>
+  </div>
+
+  <div class="relogio">
+    <svg viewBox="0 0 200 200" aria-hidden="true">
+      <circle class="trilho" cx="100" cy="100" r="90"/>
+      <circle class="progresso" id="anel" cx="100" cy="100" r="90" transform="rotate(-90 100 100)"/>
+    </svg>
+    <div class="tempo" id="tempo" role="timer" aria-label="Tempo restante">25:00</div>
+  </div>
+
+  <p class="mensagem" id="mensagem" role="status"></p>
+
+  <div class="acoes">
+    <button type="button" class="botao" id="btn-principal">Iniciar</button>
+    <button type="button" class="botao botao-leve" id="btn-cancelar" hidden>Cancelar</button>
+  </div>
+
+  <label for="materia">Matéria</label>
+  <select id="materia">
+    <option value="">Sem matéria</option>
+    {% for m in materias %}<option value="{{ m.id }}">{{ m.nome }}</option>{% endfor %}
+  </select>
+
+  <details class="ajustes">
+    <summary>Ajustar durações (minutos)</summary>
+    <div class="campos-duracao">
+      <div><label for="dur-foco">Foco</label><input id="dur-foco" type="number" min="1" max="180" data-tipo="foco" value="25"></div>
+      <div><label for="dur-pausa_curta">Pausa curta</label><input id="dur-pausa_curta" type="number" min="1" max="180" data-tipo="pausa_curta" value="5"></div>
+      <div><label for="dur-pausa_longa">Pausa longa</label><input id="dur-pausa_longa" type="number" min="1" max="180" data-tipo="pausa_longa" value="15"></div>
+    </div>
+  </details>
 </section>
+
+<section class="cartao placar">
+  <div><span class="numero" id="focos-hoje">{{ focos_hoje }}</span>pomodoros hoje</div>
+  <div><span class="numero" id="total-focos">{{ total_focos }}</span>pomodoros no total</div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/timer.js') }}" defer></script>
 {% endblock %}

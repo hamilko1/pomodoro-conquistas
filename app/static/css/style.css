@@ -107,3 +107,90 @@ a { color: var(--tomate-escuro); }
 .aviso { max-width: 26rem; margin: 1rem auto 0; padding: 0.7rem 0.9rem; border-radius: 8px; }
 .aviso-sucesso { background: var(--sucesso-fundo); color: var(--sucesso); }
 .aviso-erro { background: var(--erro-fundo); color: var(--erro); }
+
+[hidden] { display: none !important; }
+
+select, input[type="number"] {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  font: inherit;
+  color: inherit;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+}
+select:focus-visible, input[type="number"]:focus-visible, .tipo:focus-visible, summary:focus-visible {
+  outline: 3px solid rgba(199, 62, 45, 0.45);
+  outline-offset: 2px;
+}
+
+.timer { max-width: 28rem; margin: 1.5rem auto 0; text-align: center; }
+.timer label { text-align: left; }
+
+.tipos {
+  display: inline-flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  background: var(--fundo);
+  border-radius: 10px;
+}
+.tipo {
+  padding: 0.45rem 0.9rem;
+  font: inherit;
+  color: var(--tinta-suave);
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.tipo[aria-pressed="true"] {
+  color: var(--tinta);
+  font-weight: 600;
+  background: var(--superficie);
+  box-shadow: 0 0 0 1px var(--borda);
+}
+.tipo:disabled { cursor: default; }
+
+.relogio { position: relative; width: 15rem; height: 15rem; margin: 1.5rem auto 1rem; }
+.relogio svg { width: 100%; height: 100%; }
+.trilho { fill: none; stroke: var(--borda); stroke-width: 10; }
+.progresso {
+  fill: none;
+  stroke: var(--tomate);
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-dasharray: 565.49;
+  stroke-dashoffset: 565.49;
+}
+.tempo {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.25rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.mensagem { min-height: 1.5rem; margin: 0 0 0.75rem; color: var(--tinta-suave); }
+.acoes { display: flex; gap: 0.75rem; justify-content: center; }
+.acoes .botao { min-width: 8rem; margin-top: 0; }
+.acoes .botao-leve { padding: 0.7rem 1.25rem; }
+.botao:disabled { opacity: 0.6; cursor: default; }
+
+.ajustes { margin-top: 1.5rem; padding-top: 1rem; text-align: left; border-top: 1px solid var(--borda); }
+.ajustes summary { cursor: pointer; color: var(--tinta-suave); }
+.campos-duracao { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+.campos-duracao label { margin-top: 0.75rem; }
+
+.placar {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  max-width: 28rem;
+  margin: 1rem auto 0;
+  text-align: center;
+  color: var(--tinta-suave);
+}
+.numero { display: block; font-size: 2rem; font-weight: 600; color: var(--tinta); font-variant-numeric: tabular-nums; }

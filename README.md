@@ -10,9 +10,10 @@ Projeto Integrador Transdisciplinar em Engenharia de Software II.
 ```
 app/
   models/        # Model: regras de dados e validação (Usuario, Materia, SessaoPomodoro, Meta, Conquista...)
-  controllers/   # Controller: recebe a requisição e decide o que fazer (auth, main)
+  controllers/   # Controller: recebe a requisição e decide o que fazer (auth, main, API de sessões)
   templates/     # View: HTML renderizado com Jinja2
   static/css/    # Estilos
+  static/js/     # Timer do navegador (timer.js)
 tests/           # Testes automatizados (Pytest)
 docs/            # Documentação e schema.sql (projeto físico do banco)
 config.py        # Configurações (lê o arquivo .env)
@@ -65,7 +66,7 @@ Os testes usam um banco SQLite em memória, então não precisam de PostgreSQL.
 ## Status
 
 - [x] Cadastro, login e logout
-- [ ] Timer pomodoro e registro de sessões
+- [x] Timer pomodoro e registro de sessões
 - [ ] Matérias e metas
 - [ ] Concessão automática de conquistas
 - [ ] Histórico e estatísticas

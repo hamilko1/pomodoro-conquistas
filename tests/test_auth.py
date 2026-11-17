@@ -30,7 +30,9 @@ def test_cadastro_cria_conta_e_entra(client):
         follow_redirects=True,
     )
     assert resp.status_code == 200
-    assert "Olá, Bia" in resp.get_data(as_text=True)
+    html = resp.get_data(as_text=True)
+    assert 'id="timer"' in html
+    assert "Bia" in html
     assert Usuario.buscar_por_email("bia@exemplo.com") is not None
 
 
@@ -56,7 +58,9 @@ def test_cadastro_com_email_repetido_mostra_erro(client, usuario):
 
 def test_login_correto_leva_ao_painel(client, usuario):
     resp = _login(client, follow_redirects=True)
-    assert "Olá, Ana Souza" in resp.get_data(as_text=True)
+    html = resp.get_data(as_text=True)
+    assert 'id="timer"' in html
+    assert "Ana Souza" in html
 
 
 def test_login_com_senha_errada(client, usuario):

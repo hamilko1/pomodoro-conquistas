@@ -20,9 +20,11 @@ def create_app(config_class=Config):
     from .cli import registrar_comandos
     from .controllers.auth_controller import bp as auth_bp
     from .controllers.main_controller import bp as main_bp
+    from .controllers.sessao_controller import bp as sessoes_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(main_bp)
+    app.register_blueprint(sessoes_bp)
     registrar_comandos(app)
 
     return app

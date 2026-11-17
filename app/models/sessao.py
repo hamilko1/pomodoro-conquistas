@@ -1,6 +1,12 @@
 from ..extensions import db
+from .base import ErroValidacao, agora, inicio_do_dia_local
+from .materia import Materia
 
 TIPOS_SESSAO = ("foco", "pausa_curta", "pausa_longa")
+DURACAO_MIN = 1
+DURACAO_MAX = 180
+# Folga para latência de rede e arredondamento do relógio do navegador
+TOLERANCIA_SEGUNDOS = 5
 
 
 class SessaoPomodoro(db.Model):
@@ -20,3 +26,58 @@ class SessaoPomodoro(db.Model):
 
     usuario = db.relationship("Usuario", back_populates="sessoes")
     materia = db.relationship("Materia")
+
+    @classmethod
+    def iniciar(cls, usuario, tipo, duracao_min, materia_id=None):
+        """Registra o começo de um ciclo (ainda não concluído)."""
+        if tipo not in TIPOS_SESSAO:
+            raise ErroValidacao("Tipo de ciclo inválido.")
+        if (
+            not isinstance(duracao_min, int)
+            or isinstance(duracao_min, bool)
+            or not DURACAO_MIN <= duracao_min <= DURACAO_MAX
+        ):
+            raise ErroValidacao(
+                f"A duração deve ser um número inteiro de {DURACAO_MIN} a {DURACAO_MAX} minutos."
+            )
+        if materia_id is not None:
+            materia = db.session.get(Materia, materia_id) if isinstance(materia_id, int) else None
+            if materia is None or materia.usuario_id != usuario.id:
+                raise ErroValidacao("Matéria não encontrada.")
+
+        sessao = cls(
+            usuario_id=usuario.id,
+            materia_id=materia_id,
+            inicio=agora(),
+            duracao_min=duracao_min,
+            tipo=tipo,
+        )
+        db.session.add(sessao)
+        db.session.commit()
+        return sessao
+
+    def concluir(self):
+        """Marca como concluída, conferindo no servidor se o tempo realmente passou."""
+        if self.concluida:
+            raise ErroValidacao("Esta sessão já foi concluída.")
+        decorrido = (agora() - self.inicio).total_seconds()
+        if decorrido < self.duracao_min * 60 - TOLERANCIA_SEGUNDOS:
+            raise ErroValidacao("O tempo desta sessão ainda não terminou.")
+        self.concluida = True
+        db.session.commit()
+
+    @classmethod
+    def _focos_concluidos(cls, usuario):
+        return db.select(db.func.count()).select_from(cls).where(
+            cls.usuario_id == usuario.id, cls.tipo == "foco", cls.concluida.is_(True)
+        )
+
+    @classmethod
+    def total_focos(cls, usuario):
+        return db.session.scalar(cls._focos_concluidos(usuario))
+
+    @classmethod
+    def focos_hoje(cls, usuario):
+        return db.session.scalar(
+            cls._focos_concluidos(usuario).where(cls.inicio >= inicio_do_dia_local())
+        )
