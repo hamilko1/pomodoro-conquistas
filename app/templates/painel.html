@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block titulo %}Painel{% endblock %}
+{% block conteudo %}
+<section class="cartao">
+  <h1>Olá, {{ current_user.nome }}</h1>
+  <p>O timer, as metas e as conquistas vão aparecer aqui nas próximas etapas.</p>
+</section>
+{% endblock %}

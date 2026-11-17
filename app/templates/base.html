@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titulo %}Pomodoro{% endblock %} · Pomodoro com Conquistas</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header class="topo">
+    <a class="marca" href="{{ url_for('main.index') }}"><span class="tomate" aria-hidden="true"></span>Pomodoro</a>
+    {% if current_user.is_authenticated %}
+    <form method="post" action="{{ url_for('auth.logout') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <span class="saudacao">{{ current_user.nome }}</span>
+      <button class="botao botao-leve" type="submit">Sair</button>
+    </form>
+    {% endif %}
+  </header>
+
+  <main class="conteudo">
+    {% with mensagens = get_flashed_messages(with_categories=true) %}
+      {% for categoria, texto in mensagens %}
+        <p class="aviso aviso-{{ categoria }}" role="status">{{ texto }}</p>
+      {% endfor %}
+    {% endwith %}
+    {% block conteudo %}{% endblock %}
+  </main>
+</body>
+</html>
