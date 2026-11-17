@@ -57,6 +57,7 @@ CREATE TABLE metas (
     descricao        VARCHAR(150) NOT NULL,
     quantidade_alvo  SMALLINT     NOT NULL CHECK (quantidade_alvo > 0),
     prazo            DATE,
+    data_criacao     TIMESTAMP    NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC'),
     concluida        BOOLEAN      NOT NULL DEFAULT FALSE,
     data_conclusao   TIMESTAMP
 );

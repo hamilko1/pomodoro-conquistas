@@ -11,6 +11,11 @@
   <header class="topo">
     <a class="marca" href="{{ url_for('main.index') }}"><span class="tomate" aria-hidden="true"></span>Pomodoro</a>
     {% if current_user.is_authenticated %}
+    <nav class="menu" aria-label="Principal">
+      <a href="{{ url_for('main.painel') }}">Timer</a>
+      <a href="{{ url_for('materias.listar') }}">Matérias</a>
+      <a href="{{ url_for('metas.listar') }}">Metas</a>
+    </nav>
     <form method="post" action="{{ url_for('auth.logout') }}">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <span class="saudacao">{{ current_user.nome }}</span>

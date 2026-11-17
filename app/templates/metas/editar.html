@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block titulo %}Editar meta{% endblock %}
+{% block conteudo %}
+<section class="cartao">
+  <h1>Editar meta</h1>
+  <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    {% include "metas/_campos.html" %}
+    <button class="botao" type="submit">Salvar</button>
+    <a class="botao botao-leve" href="{{ url_for('metas.listar') }}">Cancelar</a>
+  </form>
+</section>
+{% endblock %}

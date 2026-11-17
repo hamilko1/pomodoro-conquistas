@@ -1,0 +1,27 @@
+<label for="descricao">Descrição</label>
+<input id="descricao" name="descricao" type="text" maxlength="150" required
+       value="{{ form.get('descricao', meta.descricao if meta else '') }}" placeholder="Ex.: Revisar a matéria da prova">
+
+{% set alvo = form.get('quantidade_alvo', meta.quantidade_alvo if meta else '') %}
+{% set prazo = form.get('prazo', meta.prazo.isoformat() if meta and meta.prazo else '') %}
+{% set materia_atual = form.get('materia_id', meta.materia_id if meta and meta.materia_id else '') | string %}
+
+<div class="campos-meta">
+  <div>
+    <label for="quantidade_alvo">Pomodoros</label>
+    <input id="quantidade_alvo" name="quantidade_alvo" type="number" min="1" max="500" required value="{{ alvo }}">
+  </div>
+  <div>
+    <label for="prazo">Prazo <small>(opcional)</small></label>
+    <input id="prazo" name="prazo" type="date" value="{{ prazo }}">
+  </div>
+  <div>
+    <label for="materia_id">Matéria <small>(opcional)</small></label>
+    <select id="materia_id" name="materia_id">
+      <option value="">Qualquer matéria</option>
+      {% for m in materias %}
+      <option value="{{ m.id }}" {% if materia_atual == m.id | string %}selected{% endif %}>{{ m.nome }}</option>
+      {% endfor %}
+    </select>
+  </div>
+</div>

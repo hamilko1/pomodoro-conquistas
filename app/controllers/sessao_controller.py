@@ -4,7 +4,7 @@ from flask import Blueprint, jsonify, request
 from flask_login import current_user
 
 from ..extensions import db
-from ..models import ErroValidacao, SessaoPomodoro
+from ..models import ErroValidacao, Meta, SessaoPomodoro
 
 bp = Blueprint("sessoes", __name__, url_prefix="/api/sessoes")
 
@@ -42,8 +42,13 @@ def concluir(sessao_id):
         sessao.concluir()
     except ErroValidacao as erro:
         return jsonify(erro=str(erro)), 409
-    return jsonify(
-        ok=True,
-        focos_hoje=SessaoPomodoro.focos_hoje(current_user),
-        total_focos=SessaoPomodoro.total_focos(current_user),
-    )
+    resposta = {
+        "ok": True,
+        "focos_hoje": SessaoPomodoro.focos_hoje(current_user),
+        "total_focos": SessaoPomodoro.total_focos(current_user),
+    }
+    if sessao.tipo == "foco":
+        metas = Meta.avaliar_concluidas(current_user)
+        if metas:
+            resposta["metas_cumpridas"] = [m.descricao for m in metas]
+    return jsonify(resposta)

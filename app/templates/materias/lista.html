@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block titulo %}Matérias{% endblock %}
+{% block conteudo %}
+<section class="cartao">
+  <h1>Matérias</h1>
+  <form method="post" class="linha-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div>
+      <label for="nome">Nova matéria</label>
+      <input id="nome" name="nome" type="text" maxlength="80" required value="{{ form.get('nome', '') }}" placeholder="Ex.: Cálculo I">
+    </div>
+    <button class="botao" type="submit">Adicionar</button>
+  </form>
+
+  {% if materias %}
+  <ul class="lista">
+    {% for m in materias %}
+    <li>
+      <div>
+        <strong>{{ m.nome }}</strong>
+        <small>{{ m.focos_concluidos() }} pomodoro(s) concluído(s)</small>
+      </div>
+      <div class="acoes-item">
+        <a class="botao botao-leve" href="{{ url_for('materias.editar', materia_id=m.id) }}">Renomear</a>
+        <form method="post" action="{{ url_for('materias.excluir', materia_id=m.id) }}"
+              onsubmit="return confirm('Excluir esta matéria? Metas abertas dela também serão excluídas; os pomodoros são mantidos.');">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="botao botao-leve" type="submit">Excluir</button>
+        </form>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="nota">Você ainda não tem matérias. Crie a primeira acima para associar seus pomodoros a ela.</p>
+  {% endif %}
+</section>
+{% endblock %}

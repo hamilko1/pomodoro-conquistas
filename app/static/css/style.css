@@ -194,3 +194,57 @@ select:focus-visible, input[type="number"]:focus-visible, .tipo:focus-visible, s
   color: var(--tinta-suave);
 }
 .numero { display: block; font-size: 2rem; font-weight: 600; color: var(--tinta); font-variant-numeric: tabular-nums; }
+
+/* ---------- navegação ---------- */
+.menu { display: flex; gap: 1.25rem; }
+.menu a { color: var(--tinta); text-decoration: none; font-weight: 500; }
+.menu a:hover { text-decoration: underline; }
+
+/* ---------- matérias e metas ---------- */
+.conteudo > .cartao + .cartao { margin-top: 1rem; }
+.linha-form { display: flex; align-items: flex-end; gap: 0.75rem; }
+.linha-form > div { flex: 1; }
+.linha-form .botao { margin-top: 0; }
+
+.lista { list-style: none; margin: 1.25rem 0 0; padding: 0; }
+.cartao-lista .lista { margin-top: 0; }
+.lista li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 0;
+  border-top: 1px solid var(--borda);
+}
+.lista li:first-child { border-top: 0; }
+.lista small { display: block; color: var(--tinta-suave); }
+.acoes-item { display: flex; gap: 0.5rem; align-items: center; }
+.acoes-item form { margin: 0; }
+.acoes-item .botao-leve { text-decoration: none; }
+a.botao { text-decoration: none; }
+.cartao-estreito .botao-leve { margin-left: 0.5rem; }
+
+.campos-meta { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; }
+input[type="date"] {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  font: inherit;
+  color: inherit;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+}
+
+.meta-corpo { flex: 1; min-width: 0; }
+.barra { height: 0.6rem; margin: 0.5rem 0 0.25rem; background: var(--borda); border-radius: 999px; overflow: hidden; }
+.barra span { display: block; height: 100%; background: var(--tomate); }
+.meta-concluida .barra span { background: var(--sucesso); }
+.selo { padding: 0.05rem 0.5rem; font-size: 0.8rem; border-radius: 999px; }
+.selo-ok { color: var(--sucesso); background: var(--sucesso-fundo); }
+.selo-venc { color: var(--erro); background: var(--erro-fundo); }
+
+@media (max-width: 40rem) {
+  .topo { flex-wrap: wrap; gap: 0.5rem; }
+  .campos-meta { grid-template-columns: 1fr; }
+  .linha-form, .lista li { flex-direction: column; align-items: stretch; }
+}

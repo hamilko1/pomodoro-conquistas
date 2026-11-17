@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block titulo %}Metas{% endblock %}
+{% block conteudo %}
+<section class="cartao">
+  <h1>Metas</h1>
+  <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    {% set meta = None %}
+    {% include "metas/_campos.html" %}
+    <button class="botao" type="submit">Criar meta</button>
+  </form>
+  <p class="nota">Só contam os pomodoros de foco concluídos depois que a meta é criada.</p>
+</section>
+
+<section class="cartao cartao-lista">
+  {% if metas %}
+  <ul class="lista">
+    {% for m in metas %}
+    <li class="meta meta-{{ m.situacao }}">
+      <div class="meta-corpo">
+        <strong>{{ m.descricao }}</strong>
+        <small>
+          {% if m.materia %}{{ m.materia.nome }}{% else %}Qualquer matéria{% endif %}
+          {% if m.prazo %} · até {{ m.prazo.strftime('%d/%m/%Y') }}{% endif %}
+          {% if m.situacao == 'concluida' %} · <span class="selo selo-ok">Cumprida</span>
+          {% elif m.situacao == 'vencida' %} · <span class="selo selo-venc">Prazo encerrado</span>{% endif %}
+        </small>
+        <div class="barra" role="progressbar" aria-valuemin="0" aria-valuemax="{{ m.quantidade_alvo }}" aria-valuenow="{{ m.feitos }}"
+             aria-label="Progresso da meta {{ m.descricao }}">
+          <span style="width: {{ m.percentual }}%"></span>
+        </div>
+        <small>{{ m.feitos }} de {{ m.quantidade_alvo }} pomodoros</small>
+      </div>
+      <div class="acoes-item">
+        {% if not m.concluida %}
+        <a class="botao botao-leve" href="{{ url_for('metas.editar', meta_id=m.id) }}">Editar</a>
+        {% endif %}
+        <form method="post" action="{{ url_for('metas.excluir', meta_id=m.id) }}"
+              onsubmit="return confirm('Excluir esta meta?');">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="botao botao-leve" type="submit">Excluir</button>
+        </form>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="nota">Nenhuma meta ainda. Crie uma acima, por exemplo: “10 pomodoros de Cálculo até sexta”.</p>
+  {% endif %}
+</section>
+{% endblock %}
