@@ -258,3 +258,14 @@ input[type="date"] {
 .medalha-bloqueada .icone { filter: grayscale(1); opacity: 0.45; }
 .medalha-bloqueada strong { color: var(--tinta-suave); }
 @media (max-width: 40rem) { .medalhas { grid-template-columns: 1fr; } }
+
+/* ---------- estatísticas ---------- */
+.cartao h2 { margin: 0 0 1rem; font-size: 1.15rem; font-weight: 600; }
+.cartao h2 small { font-weight: 400; color: var(--tinta-suave); }
+.resumo { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; text-align: center; color: var(--tinta-suave); }
+.grafico { list-style: none; margin: 0; padding: 0; height: 12rem; display: flex; align-items: flex-end; gap: 0.35rem; }
+.grafico li { flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; min-width: 0; }
+.grafico .coluna { display: block; width: 100%; min-height: 2px; background: var(--tomate); border-radius: 4px 4px 0 0; }
+.grafico .qtd { font-size: 0.8rem; color: var(--tinta-suave); height: 1.2rem; }
+.grafico .data { margin-top: 0.3rem; font-size: 0.7rem; color: var(--tinta-suave); }
+@media (max-width: 40rem) { .resumo { grid-template-columns: 1fr 1fr; } .grafico .data { display: none; } }

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block titulo %}Estatísticas{% endblock %}
+{% block conteudo %}
+<section class="cartao">
+  <h1>Estatísticas</h1>
+  <div class="resumo">
+    <div><span class="numero">{{ est.hoje }}</span>hoje</div>
+    <div><span class="numero">{{ est.semana }}</span>últimos 7 dias</div>
+    <div><span class="numero">{{ est.total }}</span>no total</div>
+    <div><span class="numero">{{ est.tempo_total }}</span>de foco</div>
+  </div>
+</section>
+
+<section class="cartao">
+  <h2>Pomodoros por dia <small>(últimos {{ est.dias }} dias)</small></h2>
+  {% if est.total %}
+  <ol class="grafico" aria-label="Pomodoros concluídos por dia">
+    {% for d in est.serie %}
+    <li title="{{ d.dia.strftime('%d/%m') }}: {{ d.focos }} pomodoro(s)">
+      <span class="qtd">{{ d.focos if d.focos else '' }}</span>
+      <span class="coluna" style="height: {{ '%.2f' | format(d.altura * 0.09) }}rem"></span>
+      <span class="data">{{ d.dia.strftime('%d/%m') }}</span>
+    </li>
+    {% endfor %}
+  </ol>
+  {% else %}
+  <p class="nota">Nenhum pomodoro concluído ainda. Faça seu primeiro foco no Timer!</p>
+  {% endif %}
+</section>
+
+<section class="cartao">
+  <h2>Por matéria</h2>
+  {% if est.materias %}
+  <ul class="lista">
+    {% for m in est.materias %}
+    <li>
+      <strong>{{ m.nome }}</strong>
+      <span>{{ m.focos }} pomodoro(s) · {{ m.tempo }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="nota">As matérias aparecem aqui depois que você concluir focos associados a elas.</p>
+  {% endif %}
+</section>
+{% endblock %}

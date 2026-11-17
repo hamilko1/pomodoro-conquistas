@@ -16,6 +16,7 @@
       <a href="{{ url_for('materias.listar') }}">Matérias</a>
       <a href="{{ url_for('metas.listar') }}">Metas</a>
       <a href="{{ url_for('conquistas.listar') }}">Conquistas</a>
+      <a href="{{ url_for('estatisticas.painel') }}">Estatísticas</a>
     </nav>
     <form method="post" action="{{ url_for('auth.logout') }}">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">

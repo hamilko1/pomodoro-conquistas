@@ -1,6 +1,16 @@
+from datetime import timedelta
+
 from ..extensions import db
-from .base import ErroValidacao, agora, inicio_do_dia_local
+from .base import ErroValidacao, agora, hoje_local, inicio_do_dia_local, para_local
 from .materia import Materia
+
+def formatar_minutos(minutos):
+    """90 -> '1h30min'; 25 -> '25min'."""
+    horas, resto = divmod(int(minutos), 60)
+    if horas == 0:
+        return f"{resto}min"
+    return f"{horas}h{resto:02d}min" if resto else f"{horas}h"
+
 
 TIPOS_SESSAO = ("foco", "pausa_curta", "pausa_longa")
 DURACAO_MIN = 1
@@ -81,3 +91,52 @@ class SessaoPomodoro(db.Model):
         return db.session.scalar(
             cls._focos_concluidos(usuario).where(cls.inicio >= inicio_do_dia_local())
         )
+
+    @classmethod
+    def estatisticas(cls, usuario, dias=14):
+        """Resumo dos pomodoros de foco concluídos (dias no horário de Brasília)."""
+        linhas = db.session.execute(
+            db.select(cls.inicio, cls.duracao_min, cls.materia_id).where(
+                cls.usuario_id == usuario.id, cls.tipo == "foco", cls.concluida.is_(True)
+            )
+        ).all()
+        nomes = {m.id: m.nome for m in Materia.listar(usuario)}
+
+        por_dia, por_materia, minutos_total = {}, {}, 0
+        for inicio, duracao, materia_id in linhas:
+            dia = para_local(inicio).date()
+            por_dia[dia] = por_dia.get(dia, 0) + 1
+            item = por_materia.setdefault(materia_id, [0, 0])
+            item[0] += 1
+            item[1] += duracao
+            minutos_total += duracao
+
+        hoje = hoje_local()
+        serie = [
+            (hoje - timedelta(days=i), por_dia.get(hoje - timedelta(days=i), 0))
+            for i in range(dias - 1, -1, -1)
+        ]
+        maximo = max((n for _, n in serie), default=0)
+        materias = sorted(
+            (
+                {
+                    "nome": nomes.get(mid, "Sem matéria"),
+                    "focos": focos,
+                    "tempo": formatar_minutos(minutos),
+                }
+                for mid, (focos, minutos) in por_materia.items()
+            ),
+            key=lambda m: (-m["focos"], m["nome"].lower()),
+        )
+        return {
+            "total": len(linhas),
+            "hoje": por_dia.get(hoje, 0),
+            "semana": sum(por_dia.get(hoje - timedelta(days=i), 0) for i in range(7)),
+            "tempo_total": formatar_minutos(minutos_total),
+            "serie": [
+                {"dia": d, "focos": n, "altura": int(n * 100 / maximo) if maximo else 0}
+                for d, n in serie
+            ],
+            "dias": dias,
+            "materias": materias,
+        }
