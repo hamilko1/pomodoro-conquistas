@@ -4,7 +4,7 @@ from flask import Blueprint, jsonify, request
 from flask_login import current_user
 
 from ..extensions import db
-from ..models import ErroValidacao, Meta, SessaoPomodoro
+from ..models import Conquista, ErroValidacao, Meta, SessaoPomodoro
 
 bp = Blueprint("sessoes", __name__, url_prefix="/api/sessoes")
 
@@ -51,4 +51,10 @@ def concluir(sessao_id):
         metas = Meta.avaliar_concluidas(current_user)
         if metas:
             resposta["metas_cumpridas"] = [m.descricao for m in metas]
+        # Depois das metas, para que "Meta Cumprida" seja concedida na mesma hora
+        novas = Conquista.avaliar(current_user)
+        if novas:
+            resposta["conquistas_novas"] = [
+                {"nome": c.nome, "descricao": c.descricao, "icone": c.icone} for c in novas
+            ]
     return jsonify(resposta)

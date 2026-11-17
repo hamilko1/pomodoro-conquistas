@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block titulo %}Conquistas{% endblock %}
+{% block conteudo %}
+<section class="cartao">
+  <h1>Conquistas</h1>
+  {% if itens %}
+  <p class="nota">{{ obtidas }} de {{ itens | length }} conquistadas.</p>
+  <ul class="medalhas">
+    {% for i in itens %}
+    {% set c = i.conquista %}
+    <li class="medalha {{ 'medalha-ok' if i.data else 'medalha-bloqueada' }}">
+      <span class="icone" aria-hidden="true">{{ c.icone }}</span>
+      <div>
+        <strong>{{ c.nome }}</strong>
+        <small>{{ c.descricao }}</small>
+        {% if i.data %}
+        <small>Conquistada em {{ i.data.strftime('%d/%m/%Y') }}</small>
+        {% elif i.progresso %}
+        <small>{{ i.progresso[0] }} de {{ i.progresso[1] }}</small>
+        {% endif %}
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="nota">O catálogo de conquistas está vazio. Rode <code>flask --app run seed</code> para cadastrá-lo.</p>
+  {% endif %}
+</section>
+{% endblock %}

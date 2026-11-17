@@ -248,3 +248,13 @@ input[type="date"] {
   .campos-meta { grid-template-columns: 1fr; }
   .linha-form, .lista li { flex-direction: column; align-items: stretch; }
 }
+
+/* ---------- conquistas ---------- */
+.medalhas { list-style: none; margin: 1rem 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.medalha { display: flex; gap: 0.9rem; align-items: center; padding: 0.9rem; border: 1px solid var(--borda); border-radius: 10px; }
+.medalha small { display: block; color: var(--tinta-suave); }
+.medalha .icone { font-size: 2rem; line-height: 1; }
+.medalha-ok { background: var(--sucesso-fundo); border-color: transparent; }
+.medalha-bloqueada .icone { filter: grayscale(1); opacity: 0.45; }
+.medalha-bloqueada strong { color: var(--tinta-suave); }
+@media (max-width: 40rem) { .medalhas { grid-template-columns: 1fr; } }

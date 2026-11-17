@@ -207,6 +207,12 @@
         e.tipo = "foco";
         mostrarMensagem("Pausa concluída. Pronto para o próximo foco?");
       }
+      const extras = [];
+      (dados.metas_cumpridas || []).forEach(function (d) { extras.push("Meta cumprida: " + d + "."); });
+      (dados.conquistas_novas || []).forEach(function (c) {
+        extras.push("Nova conquista: " + c.icone + " " + c.nome + "!");
+      });
+      if (extras.length) mostrarMensagem(msgEl.textContent + " " + extras.join(" "));
       avisar(tipoConcluido);
     } else {
       mostrarMensagem(

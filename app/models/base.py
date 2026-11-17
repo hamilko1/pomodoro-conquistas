@@ -32,3 +32,8 @@ def fim_do_dia_local(dia):
     """Instante em que o dia `dia` (date) termina em Brasília, em UTC sem fuso."""
     meia_noite = datetime(dia.year, dia.month, dia.day, tzinfo=FUSO_LOCAL) + timedelta(days=1)
     return meia_noite.astimezone(timezone.utc).replace(tzinfo=None)
+
+
+def para_local(momento):
+    """Converte um instante UTC sem fuso (como o banco guarda) para o horário de Brasília."""
+    return momento.replace(tzinfo=timezone.utc).astimezone(FUSO_LOCAL)

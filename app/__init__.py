@@ -20,6 +20,7 @@ def create_app(config_class=Config):
     from .cli import registrar_comandos
     from .controllers.auth_controller import bp as auth_bp
     from .controllers.main_controller import bp as main_bp
+    from .controllers.conquista_controller import bp as conquistas_bp
     from .controllers.materia_controller import bp as materias_bp
     from .controllers.meta_controller import bp as metas_bp
     from .controllers.sessao_controller import bp as sessoes_bp
@@ -29,6 +30,7 @@ def create_app(config_class=Config):
     app.register_blueprint(sessoes_bp)
     app.register_blueprint(materias_bp)
     app.register_blueprint(metas_bp)
+    app.register_blueprint(conquistas_bp)
     registrar_comandos(app)
 
     return app
